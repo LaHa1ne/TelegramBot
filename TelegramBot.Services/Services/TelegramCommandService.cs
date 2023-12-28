@@ -84,7 +84,7 @@ namespace TelegramBot.Services.Services
                         companyInfo = new CompanyInfoDTO()
                         {
                             INN = inn,
-                            ResponseDescription = "Сервис по предоставлению информации о компаниях недоступен"
+                            ResponseDescription = "Некорректный токен или превышен лимит на запросы к сервису"
                         };
                     }
                     companyInfoList.Add(companyInfo!);
@@ -119,6 +119,10 @@ namespace TelegramBot.Services.Services
                     }
                     return "Компания с указанным ИНН не найдена";
                 }
+                else if (response != null && response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    return "Некорректный токен или превышен лимит на запросы к сервису";
+                }
 
                 return "Сервис по предоставлению информации о компаниях недоступен";
             }
@@ -143,6 +147,10 @@ namespace TelegramBot.Services.Services
                         return await response.Content.ReadAsByteArrayAsync();
                     }
                     return "Компания с указанным ИНН не найдена";
+                }
+                else if (response != null && response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    return "Некорректный токен или превышен лимит на запросы к сервису";
                 }
 
                 return "Сервис по предоставлению информации о компаниях недоступен";
